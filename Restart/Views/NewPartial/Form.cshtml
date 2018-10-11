@@ -1,0 +1,112 @@
+﻿@model Restart.EntityFramework.tbl_Users
+    <script>
+        var currentTab = 0;
+        $("#tabs").tabs({
+            select: function (e, i) {
+                currentTab = i.index;
+            }
+        });
+        $("#submit").on("click", function (event) {
+            param = {};
+            param.SlNo = $("#SlNo").val()
+            param.UserName = $("#UserName").val();
+            param.EmailId = $("#EmailId").val();
+            param.Password = $("#Password").val();
+            param.ConfirmPassword = $("#ConfirmPassword").val();
+
+            var dataString;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var action = $("#AjaxformId").attr("action");
+            // Setting.  
+            dataString = new FormData($("#AjaxformId").get(0));
+            contentType = false;
+            processData = false;
+            $.ajax({
+                type: "POST",
+                url: "/NewPartial/Form_Save",
+                data: param,
+               // dataType: "html",
+                success: function () {
+                    //// Result.
+                    //debugger;
+                    onAjaxRequestSuccess();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    //do your own thing  
+                    debugger;
+                    alert("fail");
+                }
+            });
+
+        }); //end .submit
+        var onAjaxRequestSuccess = function (result) {
+            var tabs = $('#tabs').tabs();
+            var c = $('#tabs').tabs("length");
+            currentTab = currentTab == (c - 1) ? currentTab : (currentTab + 1);
+             tabs.tabs('select', currentTab);
+            //$('#AjaxformId').get(0).reset();
+
+        }
+    </script>
+
+@using (Ajax.BeginForm("Index", "RazorAjax", new AjaxOptions { HttpMethod = "POST" }, new { @id = "AjaxformId", @class = "form-horizontal", role = "form" }))
+{
+
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>tbl_Users</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.SlNo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SlNo, new { htmlAttributes = new { @class = "form-control",id= "SlNo" } })
+                @Html.ValidationMessageFor(model => model.SlNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", id = "UserName" } })
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EmailId, new { htmlAttributes = new { @class = "form-control", id = "EmailId" } })
+                @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", id = "Password" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", id = "ConfirmPassword" } })
+                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" id="submit" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

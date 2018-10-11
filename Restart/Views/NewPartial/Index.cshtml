@@ -1,0 +1,78 @@
+﻿
+@{
+    //ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery UI Tabs - Default functionality</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.3/themes/base/jquery-ui.css" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.8.3/jquery-ui.js"></script>
+
+
+    <script>
+        $(function () {
+            var currentTab = 0;
+            $("#tabs").tabs({
+                select: function (e, i) {
+                    currentTab = i.index;
+                }
+            });
+
+
+            $("#btnNext").on("click", function () {
+                var tabs = $('#tabs').tabs();
+                var c = $('#tabs').tabs("length");
+                currentTab = currentTab == (c - 1) ? currentTab : (currentTab + 1);
+                tabs.tabs('select', currentTab);
+                $("#btnPrevious").show();
+                if (currentTab == (c - 1)) {
+                    $("#btnNext").hide();
+                } else {
+                    $("#btnNext").show();
+                }
+            }).trigger();
+            $("#btnPrevious").on("click", function () {
+                var tabs = $('#tabs').tabs();
+                var c = $('#tabs').tabs("length");
+                currentTab = currentTab == 0 ? currentTab : (currentTab - 1);
+                tabs.tabs('select', currentTab);
+                if (currentTab == 0) {
+                    $("#btnNext").show();
+                    $("#btnPrevious").hide();
+                }
+                if (currentTab < (c - 1)) {
+                    $("#btnNext").show();
+                }
+            }).trigger();
+            
+        });
+
+
+        
+
+    </script>
+</head>
+<body>
+
+    <div id="tabs">
+        <ul>
+            <li><a href="@Url.Action("Form")">Enter Details</a></li>
+            <li><a href="@Url.Action("Display")">Display Details</a></li>
+            <li><a href="@Url.Action("Save")">Save Details</a></li>
+        </ul>
+
+    </div>
+    <input type="button" id="btnPrevious" value="Previous" style="display:none" />
+    <input type="button" id="btnNext" value="Next" />
+
+
+</body>
+</html>
